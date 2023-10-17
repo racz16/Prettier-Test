@@ -10,21 +10,64 @@ import { GLSLANGVALIDATOR, NEW_LINE, VALIDATABLE_EXTENSIONS } from '../core/cons
 import { RES_FOLDER, getExtension, getPlatformName } from '../core/utility';
 import { Server } from '../server';
 
-export class DiagnosticProvider{
-    private configuration:Configuration;private document:TextDocument;private diagnostics:Diagnostic[]=[];
-    public static async diagnosticOpenChangeHandler(event:TextDocumentChangeEvent<TextDocument>):Promise<void>{await new DiagnosticProvider(event.document).onDocumentOpenChange();}
-    public static async diagnosticConfigurationHandler(document:TextDocument):Promise<void>{await new DiagnosticProvider(document).onDocumentOpenChange();}
-    public static diagnosticCloseHandler(event:TextDocumentChangeEvent<TextDocument>):void{new DiagnosticProvider(event.document).onDocumentClose();}
-    public static isValidationRequired(oldConfiguration:Configuration,newConfiguration:Configuration):boolean{return(oldConfiguration.diagnostics.enable!==newConfiguration.diagnostics.enable||(newConfiguration.diagnostics.enable&&oldConfiguration.diagnostics.markTheWholeLine!==newConfiguration.diagnostics.markTheWholeLine));}
-    private static sendDiagnostics(document:TextDocument,diagnostics:Diagnostic[]):void{Server.getServer().getConnection().sendDiagnostics({uri: document.uri,version: document.version,diagnostics,});}
-    private constructor(document:TextDocument){this.configuration=ConfigurationManager.getConfiguration();this.document=document;}
-    private async onDocumentOpenChange():Promise<void>{if(!this.configuration.diagnostics.enable){DiagnosticProvider.sendDiagnostics(this.document,[]);return;}const platformName=getPlatformName();const extension=getExtension(this.document);if(this.isDocumentValidatable(platformName,extension)){await this.validateDocument(platformName!,extension!);}}
-    private onDocumentClose():void{DiagnosticProvider.sendDiagnostics(this.document,[]);}
-    private isDocumentValidatable(platformName:string|undefined,extension:string|undefined):boolean{return !!(platformName&&extension&&VALIDATABLE_EXTENSIONS.includes(extension));}
-    private async getValidatorOutput(platformName:string,shaderStage:string):Promise<string>{return new Promise<string>((resolve)=>{const validatorPath=this.getValidatorPath(platformName);const process=exec(`${validatorPath} --stdin -C -S ${shaderStage}`,(_,validatorOutput)=>{resolve(validatorOutput);});this.provideInput(process);});}
+export class DiagnosticProvider {
+    private configuration: Configuration;
+    private document: TextDocument;
+    private diagnostics: Diagnostic[] = [];
+    public static async diagnosticOpenChangeHandler(event: TextDocumentChangeEvent<TextDocument>): Promise<void> {
+        await new DiagnosticProvider(event.document).onDocumentOpenChange();
+    }
+    public static async diagnosticConfigurationHandler(document: TextDocument): Promise<void> {
+        await new DiagnosticProvider(document).onDocumentOpenChange();
+    }
+    public static diagnosticCloseHandler(event: TextDocumentChangeEvent<TextDocument>): void {
+        new DiagnosticProvider(event.document).onDocumentClose();
+    }
+    public static isValidationRequired(oldConfiguration: Configuration, newConfiguration: Configuration): boolean {
+        return (
+            oldConfiguration.diagnostics.enable !== newConfiguration.diagnostics.enable ||
+            (newConfiguration.diagnostics.enable &&
+                oldConfiguration.diagnostics.markTheWholeLine !== newConfiguration.diagnostics.markTheWholeLine)
+        );
+    }
+    private static sendDiagnostics(document: TextDocument, diagnostics: Diagnostic[]): void {
+        Server.getServer()
+            .getConnection()
+            .sendDiagnostics({ uri: document.uri, version: document.version, diagnostics });
+    }
+    private constructor(document: TextDocument) {
+        this.configuration = ConfigurationManager.getConfiguration();
+        this.document = document;
+    }
+    private async onDocumentOpenChange(): Promise<void> {
+        if (!this.configuration.diagnostics.enable) {
+            DiagnosticProvider.sendDiagnostics(this.document, []);
+            return;
+        }
+        const platformName = getPlatformName();
+        const extension = getExtension(this.document);
+        if (this.isDocumentValidatable(platformName, extension)) {
+            await this.validateDocument(platformName!, extension!);
+        }
+    }
+    private onDocumentClose(): void {
+        DiagnosticProvider.sendDiagnostics(this.document, []);
+    }
+    private isDocumentValidatable(platformName: string | undefined, extension: string | undefined): boolean {
+        return !!(platformName && extension && VALIDATABLE_EXTENSIONS.includes(extension));
+    }
+    private async getValidatorOutput(platformName: string, shaderStage: string): Promise<string> {
+        return new Promise<string>((resolve) => {
+            const validatorPath = this.getValidatorPath(platformName);
+            const process = exec(`${validatorPath} --stdin -C -S ${shaderStage}`, (_, validatorOutput) => {
+                resolve(validatorOutput);
+            });
+            this.provideInput(process);
+        });
+    }
 
     private async dalayValidation(): Promise<void> {
-        console.log("asd");
+        console.log('asd2');
         const diagnosticDelay = ConfigurationManager.getConfiguration().diagnostics.delay;
         return new Promise((resolve) => setTimeout(resolve, diagnosticDelay));
     }
@@ -67,7 +110,12 @@ export class DiagnosticProvider{
         }
     }
 
-    private addDiagnostic(validatorSeverity: string, line: number, snippet: string | undefined, description: string): void {
+    private addDiagnostic(
+        validatorSeverity: string,
+        line: number,
+        snippet: string | undefined,
+        description: string
+    ): void {
         const diagnostic = Diagnostic.create(
             this.getRange(line, snippet),
             this.getMessage(description, snippet),
