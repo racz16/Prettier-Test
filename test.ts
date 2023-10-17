@@ -24,6 +24,7 @@ export class DiagnosticProvider{
     private async getValidatorOutput(platformName:string,shaderStage:string):Promise<string>{return new Promise<string>((resolve)=>{const validatorPath=this.getValidatorPath(platformName);const process=exec(`${validatorPath} --stdin -C -S ${shaderStage}`,(_,validatorOutput)=>{resolve(validatorOutput);});this.provideInput(process);});}
 
     private async dalayValidation(): Promise<void> {
+        console.log("asd");
         const diagnosticDelay = ConfigurationManager.getConfiguration().diagnostics.delay;
         return new Promise((resolve) => setTimeout(resolve, diagnosticDelay));
     }
