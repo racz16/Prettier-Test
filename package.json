@@ -25,6 +25,6 @@
         "typescript": "^5.2.2"
     },
     "lint-staged": {
-        "*.{ts}": "prettier --write"
+        "*": "prettier --write --ignore-unknown"
     }
 }
