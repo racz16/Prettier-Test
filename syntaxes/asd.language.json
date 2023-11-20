@@ -1,0 +1,78 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "ASD",
+    "scopeName": "source.asd",
+    "patterns": [
+        {
+            "comment": "BLOCK COMMENT",
+            "name": "comment.block.asd",
+            "begin": "\\/\\*",
+            "end": "\\*\\/",
+            "patterns": [
+                {
+                    "match": "\\\\(?=\\n)",
+                    "name": "constant.character.escape.asd"
+                }
+            ]
+        },
+        {
+            "comment": "SINGLE LINE COMMENT",
+            "name": "comment.line.double-slash.asd",
+            "begin": "//",
+            "end": "(?<!\\\\)\\n",
+            "patterns": [
+                {
+                    "match": "\\\\(?=\\n)",
+                    "name": "constant.character.escape.asd"
+                }
+            ]
+        },
+        {
+            "comment": "STRING",
+            "name": "string.quoted.double.asd",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "match": "\\\\(?=\\n)",
+                    "name": "constant.character.escape.asd"
+                }
+            ]
+        },
+        {
+            "comment": "ESCAPE",
+            "match": "\\\\(?=\\n)",
+            "name": "constant.character.escape.asd"
+        },
+        {
+            "comment": "ILLEGAL ESCAPE",
+            "match": "\\\\",
+            "name": "invalid.illegal.asd"
+        },
+        {
+            "comment": "PREPROCESSOR",
+            "name": "meta.preprocessor.asd",
+            "match": "#(\\s*([a-zA-Z_]\\w*))?"
+        },
+        {
+            "comment": "OPERATOR",
+            "name": "keyword.operator.asd",
+            "match": "="
+        },
+        {
+            "comment": "TYPE",
+            "name": "storage.type.asd",
+            "match": "\\b(float|int|bool)\\b"
+        },
+        {
+            "comment": "FUNCTION",
+            "name": "entity.name.function.asd",
+            "match": "\\b([a-zA-Z_]\\w*)(?=(\\s|/\\*.*?\\*/)*\\()"
+        },
+        {
+            "comment": "IDENTIFIER",
+            "name": "variable.asd",
+            "match": "\\b([a-zA-Z_]\\w*)\\b"
+        }
+    ]
+}

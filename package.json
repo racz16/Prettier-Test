@@ -1,30 +1,84 @@
 {
-    "name": "prettier-test",
+    "name": "asd-language-support",
+    "displayName": "ASD language support",
+    "description": "Language support for the ASD programming language.",
+    "author": "Rácz Zalán",
+    "publisher": "raczzalan",
+    "license": "MIT",
+    "keywords": [
+        "ASD"
+    ],
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "engines": {
+        "vscode": "^1.65.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "activationEvents": [
+        "onLanguage:asd",
+        "onCommand:asd-language-support.generatepreprocessed"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "asd",
+                "aliases": [
+                    "ASD"
+                ],
+                "extensions": [
+                    ".asd"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "asd",
+                "scopeName": "source.asd",
+                "path": "./syntaxes/asd.language.json"
+            }
+        ],
+        "commands": [
+            {
+                "command": "asd-language-support.generatepreprocessed",
+                "title": "Generate preprocessed ASD source code",
+                "enablement": "editorLangId == asd && !editorReadonly",
+                "icon": "$(open-preview)"
+            }
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "asd-language-support.generatepreprocessed",
+                    "group": "navigation",
+                    "when": "editorLangId == asd && !editorReadonly"
+                }
+            ]
+        }
+    },
     "scripts": {
-        "prettier-check": "prettier --check .",
+        "vscode:prepublish": "webpack --mode production",
+        "build": "webpack",
+        "watch": "webpack --watch",
+        "prettier-lint": "prettier --check .",
         "prettier-format": "prettier --write .",
-        "prepare": "husky install"
+        "eslint": "eslint ./src --ext .ts"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/racz16/Prettier-Test.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/racz16/Prettier-Test/issues"
-    },
-    "homepage": "https://github.com/racz16/Prettier-Test#readme",
     "devDependencies": {
-        "husky": "^8.0.3",
-        "lint-staged": "^15.0.1",
+        "@types/node": "^20.8.7",
+        "@types/vscode": "1.65.0",
+        "@typescript-eslint/eslint-plugin": "^6.9.0",
+        "@typescript-eslint/parser": "^6.9.0",
+        "@vscode/vsce": "^2.21.1",
+        "eslint": "^8.52.0",
+        "eslint-config-prettier": "^9.0.0",
         "prettier": "^3.0.3",
-        "typescript": "^5.2.2"
-    },
-    "lint-staged": {
-        "*": "prettier --write --ignore-unknown"
+        "prettier-plugin-organize-imports": "^3.2.3",
+        "ts-loader": "^9.5.0",
+        "typescript": "^5.2.2",
+        "webpack": "^5.89.0",
+        "webpack-cli": "^5.1.4"
     }
 }

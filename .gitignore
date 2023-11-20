@@ -1,1 +1,10 @@
+# folder
+.vscode-test
+.vscode-test-web
+dist
 node_modules
+src/_generated
+syntaxes/.antlr
+
+# file type
+**/*.vsix
