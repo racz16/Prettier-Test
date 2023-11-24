@@ -1,5 +1,5 @@
 name: Report a bug
-description: Report a bug, for example, the extension crashed, or one of the features doesn't work correctly, etc.
+description: Report a bug, for example, the extension crashes, or one of the features doesn't work correctly, etc.
 title: '[Bug]: '
 labels: ['bug']
 assignees:
@@ -24,7 +24,7 @@ body:
       id: extension-host
       attributes:
           label: Extension host
-          description: Choose **Desktop VS Code** if you downloaded VS Code, and choose **Web VS Code**, if you opened vscode.dev, github.dev, or similar.
+          description: Choose **Desktop VS Code** if you downloaded VS Code, and choose **Web VS Code**, if you used <vscode.dev>, <github.dev>, or similar.
           options:
               - Desktop VS Code
               - Web VS Code
