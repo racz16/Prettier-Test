@@ -1,4 +1,5 @@
 name: Report a bug
+description: Report a bug, for example, the extension crashed, or one of the features doesn't work correctly, etc.
 title: '[Bug]: '
 labels: ['bug']
 assignees:
