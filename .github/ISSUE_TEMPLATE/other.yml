@@ -4,8 +4,8 @@ assignees:
     - racz16
 body:
     - type: textarea
-      id: description
+      id: content
       attributes:
-          label: Description
+          label: Content
       validations:
           required: true
